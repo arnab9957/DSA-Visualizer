@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Activity,
-  BarChart3,
   Binary,
   CheckCheck,
   Clock3,
@@ -14,13 +13,11 @@ import {
   Eye,
   EyeOff,
   SlidersHorizontal,
-  Layers,
   Copy,
-  Gauge,
-  Keyboard,
   Radar,
   Sparkles,
   Download,
+  Keyboard,
 } from "lucide-react";
 import { useVisualizer } from "../hooks/useVisualizer";
 import { bubbleSort } from "../algorithms/bubbleSort";
@@ -31,7 +28,7 @@ import { radixSort } from "../algorithms/radixSort";
 import { heapSort } from "../algorithms/heapSort";
 import { insertionSort } from '../algorithms/insertionSort';
 
-// SYNTAX HIGHLIGHTING (C++ & Java)
+// SYNTAX HIGHLIGHTING CONFIG
 const CODE_KEYWORDS = new Set([
   "break", "case", "class", "const", "continue", "default", "do", "else", "enum", "for", "if", "new", "return", "struct", "switch", "template", "this", "throw", "typedef", "using", "virtual", "while", "public", "static", "package", "import", "def", "print", "len", "range", "in", "and", "or", "not", "is", "elif", "try", "except", "finally", "with", "as", "pass", "None", "True", "False"
 ]);
@@ -40,8 +37,9 @@ const CODE_TYPES = new Set([
 ]);
 const TOKEN_REGEX = /\/\*[\s\S]*?\*\/|\/\/.*|"(?:\\.|[^"\\])*"|^\s*#.*$|\b\d+\b|\b[a-zA-Z_]\w*\b/gm;
 
-function getCodeTokenClass(token) {
-  if (token.startsWith("//") || token.startsWith("/*")) return "text-emerald-400/80 italic";
+function getTokenClass(token) {
+  if (token.startsWith("//") || token.startsWith("/*") || token.startsWith("#"))
+    return "text-emerald-400/80 italic";
   if (token.startsWith('"')) return "text-amber-300";
   if (token.trim().startsWith("#")) return "text-fuchsia-400";
   if (/^\d/.test(token)) return "text-orange-300";
@@ -58,7 +56,7 @@ function renderHighlightedCode(code) {
     const token = match[0];
     const start = match.index;
     if (start > lastIndex) nodes.push(safeCode.slice(lastIndex, start));
-    nodes.push(<span key={start} className={getCodeTokenClass(token)}>{token}</span>);
+    nodes.push(<span key={start} className={getTokenClass(token)}>{token}</span>);
     lastIndex = start + token.length;
   }
   if (lastIndex < safeCode.length) nodes.push(safeCode.slice(lastIndex));
@@ -66,12 +64,12 @@ function renderHighlightedCode(code) {
 }
 
 const algorithmMap = {
-  "Bubble Sort": { run: bubbleSort, category: "Sorting", best: "O(n)", average: "O(n^2)", worst: "O(n^2)", space: "O(1)", description: "Bubble Sort compares adjacent bars and swaps them until larger values settle at the end." },
-  "Selection Sort": { run: selectionSort, category: "Sorting", best: "O(n^2)", average: "O(n^2)", worst: "O(n^2)", space: "O(1)", description: "Selection Sort repeatedly chooses the smallest unsorted value and places it into position." },
-  "Quick Sort": { run: quickSort, category: "Sorting", best: "O(n log n)", average: "O(n log n)", worst: "O(n^2)", space: "O(log n)", description: "Quick Sort partitions around a pivot and recursively solves left and right subarrays." },
+  "Bubble Sort": { run: bubbleSort, category: "Sorting", best: "O(n)", average: "O(n²)", worst: "O(n²)", space: "O(1)", description: "Bubble Sort compares adjacent bars and swaps them until larger values settle at the end." },
+  "Selection Sort": { run: selectionSort, category: "Sorting", best: "O(n²)", average: "O(n²)", worst: "O(n²)", space: "O(1)", description: "Selection Sort repeatedly chooses the smallest unsorted value and places it into position." },
+  "Quick Sort": { run: quickSort, category: "Sorting", best: "O(n log n)", average: "O(n log n)", worst: "O(n²)", space: "O(log n)", description: "Quick Sort partitions around a pivot and recursively solves left and right subarrays." },
   "Linear Search": { run: linearSearch, category: "Searching", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)", description: "Linear Search scans each value from left to right until the target value is discovered." },
   "Radix Sort": { run: radixSort, category: "Sorting", best: "O(nk)", average: "O(nk)", worst: "O(nk)", space: "O(n+k)", description: "Radix Sort avoids comparison by creating and distributing elements into buckets according to their radix." },
-  "Insertion Sort": { run: insertionSort, category: 'Sorting', best: 'O(n)', average: 'O(n^2)', worst: 'O(n^2)', space: 'O(1)', description: 'Insertion Sort builds the final sorted array one item at a time by shifting larger elements to the right.' },
+  "Insertion Sort": { run: insertionSort, category: 'Sorting', best: 'O(n)', average: 'O(n²)', worst: 'O(n²)', space: 'O(1)', description: 'Insertion Sort builds the final sorted array one item at a time by shifting larger elements to the right.' },
   "Heap Sort": { run: heapSort, category: "Sorting", best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)", space: "O(1)", description: "Heap Sort builds a max heap and repeatedly extracts the maximum element to sort the array in-place." },
 };
 
@@ -82,28 +80,11 @@ const statusStyleMap = {
   Completed: "border-emerald-400/30 bg-emerald-500/10 text-emerald-100",
 };
 
-const legendTemplate = [
-  { key: "default", label: "Default", status: "default" },
-  { key: "comparing", label: "Comparing", status: "comparing" },
-  { key: "swapping", label: "Swapping", status: "swapping" },
-  { key: "sorted", label: "Sorted / Found", status: "sorted" },
-  { key: "special", label: "Pivot / Target", status: "pivot" },
-];
-
 const colorThemes = {
   ocean: { label: "Ocean", chip: "from-cyan-500/25 to-blue-500/25", colors: { default: "bg-blue-500", comparing: "bg-amber-300", swapping: "bg-rose-500", sorted: "bg-emerald-500", pivot: "bg-violet-500", target: "bg-cyan-300" } },
   sunrise: { label: "Sunrise", chip: "from-orange-500/30 to-fuchsia-500/25", colors: { default: "bg-orange-400", comparing: "bg-fuchsia-400", swapping: "bg-red-500", sorted: "bg-lime-400", pivot: "bg-indigo-500", target: "bg-yellow-300" } },
   aurora: { label: "Aurora", chip: "from-emerald-500/30 to-cyan-500/25", colors: { default: "bg-cyan-400", comparing: "bg-yellow-300", swapping: "bg-pink-500", sorted: "bg-emerald-400", pivot: "bg-purple-500", target: "bg-orange-300" } },
 };
-
-function getBarColor(status, paletteColors) {
-  if (status === "comparing") return paletteColors.comparing;
-  if (status === "swapping") return paletteColors.swapping;
-  if (status === "sorted") return paletteColors.sorted;
-  if (status === "pivot") return paletteColors.pivot;
-  if (status === "target") return paletteColors.target;
-  return paletteColors.default;
-}
 
 function formatElapsed(seconds) {
   const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -134,8 +115,12 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
   const algorithm = algorithmMap[name];
   const activeCode = selectedLanguage === "C++" ? cppSnippet : selectedLanguage === "Java" ? javaSnippet : pythonSnippet;
 
+  const themeConfig = colorThemes[colorTheme] ?? colorThemes.ocean;
+  const themeColors = themeConfig.colors;
+
   const sortedCount = useMemo(() => array.filter((item) => item.status === "sorted").length, [array]);
   const progress = useMemo(() => runStatus === "Completed" ? 100 : array.length === 0 ? 0 : Math.round((sortedCount / array.length) * 100), [array.length, runStatus, sortedCount]);
+  
   const valueStats = useMemo(() => {
     if (array.length === 0) return { min: 0, max: 0, avg: 0 };
     const values = array.map((item) => item.value);
@@ -145,13 +130,27 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
   const maxValue = valueStats.max || 1;
   const isTooLargeForValues = array.length > 35;
   const canShowValues = showValues && !isTooLargeForValues;
-  const themeConfig = colorThemes[colorTheme] ?? colorThemes.ocean;
-  const themeColors = themeConfig.colors;
 
-  const legendItems = useMemo(() => legendTemplate.map((item) => {
-    const status = item.key === "special" ? (algorithm?.category === "Searching" ? "target" : "pivot") : item.status;
-    return { ...item, status, label: item.key === "special" ? (algorithm?.category === "Searching" ? "Target" : "Pivot") : item.label, color: themeColors[status] ?? themeColors.default };
-  }), [algorithm?.category, themeColors]);
+  const legendItems = useMemo(() => [
+    { label: "Default", color: themeColors.default },
+    { label: "Comparing", color: themeColors.comparing },
+    { label: "Swapping", color: themeColors.swapping },
+    { label: "Sorted", color: themeColors.sorted },
+    { label: algorithm?.category === "Searching" ? "Target" : "Pivot", color: algorithm?.category === "Searching" ? themeColors.target : themeColors.pivot },
+  ], [algorithm?.category, themeColors]);
+
+  // HOTKEYS
+  useEffect(() => {
+    const handleHotkeys = (e) => {
+      const tag = e.target?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      if (e.code === "Space") { e.preventDefault(); if (!isSorting) handleStart(); else if (isPaused) handleResume(); else handlePause(); }
+      if (e.key.toLowerCase() === "r") { e.preventDefault(); handleResetHighlights(); }
+      if (e.key.toLowerCase() === "n") { e.preventDefault(); handleGenerateNew(); }
+    };
+    window.addEventListener("keydown", handleHotkeys);
+    return () => window.removeEventListener("keydown", handleHotkeys);
+  }, [isSorting, isPaused]);
 
   useEffect(() => { handleGenerateNew(arraySize); }, [name]);
 
@@ -160,22 +159,6 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
     const timer = setInterval(() => setElapsedSeconds((current) => current + 1), 1000);
     return () => clearInterval(timer);
   }, [isSorting, isPaused]);
-
-  // HOTKEYS LOGIC
-  useEffect(() => {
-    const handleHotkeys = (e) => {
-      const tag = e.target?.tagName?.toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select") return;
-      if (e.code === "Space") { e.preventDefault(); if (!isSorting) handleStart(); else if (isPaused) handleResume(); else handlePause(); }
-      if (e.key.toLowerCase() === "r") { e.preventDefault(); handleResetHighlights(); }
-      if (e.key.toLowerCase() === "n") { e.preventDefault(); handleGenerateNew(); }
-      if (e.key.toLowerCase() === "v") { e.preventDefault(); !isTooLargeForValues && setShowValues(v => !v); }
-      if (e.key.toLowerCase() === "g") { e.preventDefault(); setShowGrid(g => !g); }
-      if (e.key.toLowerCase() === "c") { e.preventDefault(); const keys = Object.keys(colorThemes); setColorTheme(keys[(keys.indexOf(colorTheme) + 1) % keys.length]); }
-    };
-    window.addEventListener("keydown", handleHotkeys);
-    return () => window.removeEventListener("keydown", handleHotkeys);
-  }, [isSorting, isPaused, colorTheme, array.length]);
 
   const handleGenerateNew = (nextSize = arraySize) => {
     stopSignal.current = true;
@@ -201,35 +184,28 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
     setRunStatus("Running");
     setElapsedSeconds(0);
     await algorithm.run(array, setArray, speed, stopSignal, pauseSignal);
-    if (!stopSignal.current && !pauseSignal.current) setRunStatus("Completed");
+    if (!stopSignal.current) setRunStatus("Completed");
     setIsSorting(false);
   };
 
   const handlePause = () => { pauseSignal.current = true; setIsPaused(true); setRunStatus("Paused"); };
   const handleResume = () => { pauseSignal.current = false; setIsPaused(false); setRunStatus("Running"); };
 
-  // Missing handleCopyCode (Restored)
   const handleCopyCode = async () => {
     if (!navigator?.clipboard) return;
-    try {
-      await navigator.clipboard.writeText(activeCode);
-      setCopyState("copied");
-      setTimeout(() => setCopyState("idle"), 1400);
-    } catch {
-      setCopyState("idle");
-    }
+    await navigator.clipboard.writeText(activeCode || "");
+    setCopyState("copied");
+    setTimeout(() => setCopyState("idle"), 1400);
   };
 
-  // Missing handleDownloadCode (Restored)
   const handleDownloadCode = () => {
-    const extension = selectedLanguage === "C++" ? ".cpp" : selectedLanguage === "Java" ? ".java" : ".py";
+    const ext = selectedLanguage === "C++" ? ".cpp" : selectedLanguage === "Java" ? ".java" : ".py";
     const blob = new Blob([activeCode], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${name.replace(/\s+/g, "")}${extension}`;
+    link.download = `${name.replace(/\s+/g, "")}${ext}`;
     link.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -305,7 +281,7 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
           </div>
           <div className="mt-5 p-3 rounded-2xl border border-white/10 bg-white/5 text-[11px] text-slate-400 space-y-1">
             <p className="font-bold text-slate-200 uppercase mb-1 flex items-center gap-1"><Keyboard size={12} /> Shortcuts</p>
-            <p>Space: Start/Pause | R: Reset | N: New</p>
+            <p>Space: Start/Pause | R: Reset | N: New Data</p>
           </div>
         </aside>
 
@@ -314,14 +290,14 @@ export default function VisualizerPage({ name, cppSnippet, javaSnippet, pythonSn
             <p className="text-xs font-bold uppercase tracking-widest text-slate-300 flex items-center gap-2"><Sparkles size={14} className="text-cyan-300" /> Stage</p>
             <div className="flex gap-2">
               {legendItems.map((item) => (
-                <span key={item.key} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 uppercase"><span className={`h-2 w-2 rounded-full ${item.color}`} />{item.label}</span>
+                <span key={item.label} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 uppercase"><span className={`h-2 w-2 rounded-full ${item.color}`} />{item.label}</span>
               ))}
             </div>
           </div>
           <div className="relative h-[300px] sm:h-[450px] bg-slate-900/55 rounded-2xl border border-slate-700/60 flex items-end justify-center gap-0.5 px-4 pb-4">
             {showGrid && <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "linear-gradient(#94a3b8 1px, transparent 1px), linear-gradient(90deg, #94a3b8 1px, transparent 1px)", backgroundSize: "100% 32px, 32px 100%" }} />}
             {array.map((item, i) => (
-              <MotionBar key={i} layout transition={{ type: "spring", stiffness: 300, damping: 30 }} className={`relative rounded-t-sm flex items-end justify-center pb-1 ${getBarColor(item.status, themeColors)}`} style={{ height: `${(item.value / maxValue) * 100}%`, width: `${100 / array.length}%` }}>
+              <MotionBar key={i} layout transition={{ type: "spring", stiffness: 300, damping: 30 }} className={`relative rounded-t-sm flex items-end justify-center pb-1 ${item.status === "comparing" ? themeColors.comparing : item.status === "swapping" ? themeColors.swapping : item.status === "sorted" ? themeColors.sorted : (item.status === "pivot" || item.status === "target") ? (themeColors.pivot || themeColors.target) : themeColors.default}`} style={{ height: `${(item.value / maxValue) * 100}%`, width: `${100 / array.length}%` }}>
                 {canShowValues && <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] font-bold text-white select-none mb-1" style={{ writingMode: array.length > 30 ? 'vertical-rl' : 'horizontal-tb' }}>{item.value}</motion.span>}
               </MotionBar>
             ))}

@@ -235,6 +235,9 @@ export default function Algorithms() {
     setSpotlightId(randomAlgorithm.id);
   };
 
+  // Logic to determine which Categories to display headers for
+  const categoriesToDisplay = filterTabs.filter(tab => tab.id !== 'all');
+
   return (
     <div className="font-body relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:py-14">
       <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.15),transparent_38%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.18),transparent_36%),linear-gradient(to_bottom,rgba(15,23,42,0.9),rgba(15,23,42,0.4))]" />
@@ -444,63 +447,89 @@ export default function Algorithms() {
         </div>
       </MotionSection>
 
-      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {filteredAlgorithms.map((algorithm, index) => {
-          const Icon = algorithm.icon;
+      {/* Grouped Algorithms by Category Headers */}
+      <div className="space-y-16 mt-12">
+        {categoriesToDisplay.map((cat) => {
+          // Filter algorithms that belong to this specific category
+          const categoryAlgos = filteredAlgorithms.filter(algo => algo.category === cat.id);
+
+          // If no algorithms in this category match current search/filters, don't show the header
+          if (categoryAlgos.length === 0) return null;
+
           return (
-            <MotionArticle
-              key={algorithm.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
-              whileHover={prefersReducedMotion ? undefined : { y: -6 }}
-              onMouseEnter={() => setSpotlightId(algorithm.id)}
-              onTouchStart={() => setSpotlightId(algorithm.id)}
-              onFocusCapture={() => setSpotlightId(algorithm.id)}
-              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-800/45 p-6 shadow-xl shadow-slate-950/45 backdrop-blur-sm transition-all hover:border-cyan-300/45"
-            >
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0)_45%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div
-                className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${algorithm.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
-              />
-              <div className="relative z-10">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-blue-400/25 bg-blue-500/15 text-blue-200">
-                  <Icon size={22} />
-                </div>
-
-                <div className="mb-4 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-200">
-                    {algorithm.type}
-                  </span>
-                  <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-200">
-                    {algorithm.complexity}
-                  </span>
-                </div>
-
-                <h2 className="font-display text-2xl font-bold text-white">{algorithm.title}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                  {algorithm.description}
-                </p>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <span
-                    className={`text-xs font-semibold uppercase tracking-[0.2em] ${algorithm.accent}`}
-                  >
-                    {algorithm.level}
-                  </span>
-                  <Link
-                    to={algorithm.path}
-                    className="inline-flex items-center gap-2 rounded-full border border-blue-400/35 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-100 transition-all hover:gap-3 hover:bg-blue-500/20"
-                  >
-                    Visualize
-                    <ArrowRight size={16} />
-                  </Link>
-                </div>
+            <section key={cat.id} className="space-y-8">
+              {/* Categorized Header UI */}
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-bold text-white tracking-tight whitespace-nowrap capitalize">
+                  {cat.label}
+                </h2>
+                <div className="h-[1px] flex-grow bg-gradient-to-r from-white/15 to-transparent" />
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/5 px-2 py-1 rounded border border-white/5">
+                  {categoryAlgos.length} {categoryAlgos.length === 1 ? 'Algorithm' : 'Algorithms'}
+                </span>
               </div>
-            </MotionArticle>
+
+              {/* Grid of cards for this category */}
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {categoryAlgos.map((algorithm, index) => {
+                  const Icon = algorithm.icon;
+                  return (
+                    <MotionArticle
+                      key={algorithm.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, delay: index * 0.05 }}
+                      whileHover={prefersReducedMotion ? undefined : { y: -6 }}
+                      onMouseEnter={() => setSpotlightId(algorithm.id)}
+                      onTouchStart={() => setSpotlightId(algorithm.id)}
+                      onFocusCapture={() => setSpotlightId(algorithm.id)}
+                      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-800/45 p-6 shadow-xl shadow-slate-950/45 backdrop-blur-sm transition-all hover:border-cyan-300/45"
+                    >
+                      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0)_45%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <div
+                        className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${algorithm.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
+                      />
+                      <div className="relative z-10">
+                        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-blue-400/25 bg-blue-500/15 text-blue-200">
+                          <Icon size={22} />
+                        </div>
+
+                        <div className="mb-4 flex flex-wrap gap-2">
+                          <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-200">
+                            {algorithm.type}
+                          </span>
+                          <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-100">
+                            {algorithm.complexity}
+                          </span>
+                        </div>
+
+                        <h2 className="font-display text-2xl font-bold text-white">{algorithm.title}</h2>
+                        <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                          {algorithm.description}
+                        </p>
+
+                        <div className="mt-6 flex items-center justify-between">
+                          <span
+                            className={`text-xs font-semibold uppercase tracking-[0.2em] ${algorithm.accent}`}
+                          >
+                            {algorithm.level}
+                          </span>
+                          <Link
+                            to={algorithm.path}
+                            className="inline-flex items-center gap-2 rounded-full border border-blue-400/35 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-100 transition-all hover:gap-3 hover:bg-blue-500/20"
+                          >
+                            Visualize
+                            <ArrowRight size={16} />
+                          </Link>
+                        </div>
+                      </div>
+                    </MotionArticle>
+                  );
+                })}
+              </div>
+            </section>
           );
         })}
-
       </div>
 
       {filteredAlgorithms.length === 0 && (
