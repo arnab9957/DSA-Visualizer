@@ -21,6 +21,8 @@ import {
   reverseLinkedListPython,
   middleNodeJava,      // New Import
   reverseLinkedListJava, // New Import
+  middleNodeJS,
+  reverseLinkedListJS,
 } from "../algorithms/linkedList";
 import { renderHighlightedCode } from "../utils/codeHighlight";
 
@@ -61,6 +63,7 @@ const linkedListAlgorithms = {
     cppSnippet: reverseLinkedListCPP,
     pythonSnippet: reverseLinkedListPython,
     javaSnippet: reverseLinkedListJava, // Added Java
+    jsSnippet: reverseLinkedListJS,
   },
   middle: {
     title: "Middle Node (Slow/Fast)",
@@ -71,6 +74,7 @@ const linkedListAlgorithms = {
     cppSnippet: middleNodeCPP,
     pythonSnippet: middleNodePython,
     javaSnippet: middleNodeJava, // Added Java
+    jsSnippet: middleNodeJS,
   },
 };
 
@@ -171,7 +175,8 @@ export default function LinkedListVisualizerPage() {
   const activeCodeSnippet = useMemo(() => {
     if (selectedLanguage === "C++") return activeAlgorithm.cppSnippet;
     if (selectedLanguage === "Python") return activeAlgorithm.pythonSnippet;
-    return activeAlgorithm.javaSnippet;
+    if (selectedLanguage === "Java") return activeAlgorithm.javaSnippet;
+    return activeAlgorithm.jsSnippet;
   }, [selectedLanguage, activeAlgorithm]);
 
   const progress = useMemo(
@@ -398,6 +403,7 @@ export default function LinkedListVisualizerPage() {
     let extension = ".cpp";
     if (selectedLanguage === "Python") extension = ".py";
     if (selectedLanguage === "Java") extension = ".java";
+    if (selectedLanguage === "JavaScript") extension = ".js";
 
     const blob = new Blob([activeCodeSnippet], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -593,7 +599,7 @@ export default function LinkedListVisualizerPage() {
             <Code2 size={20} className="text-blue-400" />
             <span className="text-sm font-bold uppercase tracking-widest text-slate-200">{selectedLanguage} Source</span>
             <div className="ml-4 flex rounded-lg bg-white/5 p-1 border border-white/10">
-              {["C++", "Python", "Java"].map((lang) => ( // Added Java to mapping
+              {["C++", "Java", "Python", "JavaScript"].map((lang) => (
                 <button 
                   key={lang} 
                   onClick={() => setSelectedLanguage(lang)} 
