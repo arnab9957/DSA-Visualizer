@@ -16,8 +16,13 @@ import {
   Download,
   Keyboard,
   ArrowLeft,
+  RotateCcw,
+  Play,
+  Pause,
+  Code2
 } from "lucide-react";
 import { useVisualizer } from "../hooks/useVisualizer";
+import { motion } from "framer-motion";
 import { bubbleSort } from "../algorithms/bubbleSort";
 import { quickSort } from "../algorithms/quickSort";
 import { linearSearch } from "../algorithms/linearSearch";
@@ -28,6 +33,8 @@ import { dfs } from "../algorithms/dfs";
 import { interpolationSearch } from "../algorithms/interpolationSearch";
 import { renderHighlightedCode } from "../utils/codeHighlight";
 import { binarysearch } from '../algorithms/binarySearch';
+import { selectionSort } from "../algorithms/selectionSort";
+import { mergeSort } from "../algorithms/mergeSort";
 
 const algorithmMap = {
   "Bubble Sort": {
