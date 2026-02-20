@@ -17,41 +17,49 @@ import {
   bubbleSortCPP,
   bubbleSortJava,
   bubbleSortPython,
+  bubbleSortJS,
 } from "./algorithms/bubbleSort";
 import {
   selectionSortCPP,
   selectionSortJava,
   selectionSortPython,
+  selectionSortJS,
 } from "./algorithms/selectionSort";
 import {
   quickSortCPP,
   quickSortJava,
   quickSortPython,
+  quickSortJS,
 } from "./algorithms/quickSort";
 import {
   linearSearchCPP,
   linearSearchJava,
   linearSearchPython,
+  linearSearchJS,
 } from "./algorithms/linearSearch";
 import {
   interpolationSearchCPP,
   interpolationSearchJava,
   interpolationSearchPython,
+  interpolationSearchJS,
 } from "./algorithms/interpolationSearch";
 import {
   radixSortCPP,
   radixSortJava,
   radixSortPython,
+  radixSortJS,
 } from "./algorithms/radixSort";
 import {
   heapSortCPP,
   heapSortJava,
   heapSortPython,
+  heapSortJS,
 } from "./algorithms/heapSort";
 import {
   insertionSortCPP,
   insertionSortJava,
   insertionSortPython,
+  insertionSortJS,
 } from "./algorithms/insertionSort";
 import { dfsCPP, dfsJava } from "./algorithms/dfs";
 
@@ -79,6 +87,7 @@ export default function App() {
                   cppSnippet={bubbleSortCPP}
                   javaSnippet={bubbleSortJava}
                   pythonSnippet={bubbleSortPython}
+                  jsSnippet={bubbleSortJS}
                 />
               }
             />
@@ -90,6 +99,7 @@ export default function App() {
                   cppSnippet={selectionSortCPP}
                   javaSnippet={selectionSortJava}
                   pythonSnippet={selectionSortPython}
+                  jsSnippet={selectionSortJS}
                 />
               }
             />
@@ -101,6 +111,7 @@ export default function App() {
                   cppSnippet={quickSortCPP}
                   javaSnippet={quickSortJava}
                   pythonSnippet={quickSortPython}
+                  jsSnippet={quickSortJS}
                 />
               }
             />
@@ -112,6 +123,7 @@ export default function App() {
                   cppSnippet={linearSearchCPP}
                   javaSnippet={linearSearchJava}
                   pythonSnippet={linearSearchPython}
+                  jsSnippet={linearSearchJS}
                 />
               }
             />
@@ -123,6 +135,7 @@ export default function App() {
                   cppSnippet={interpolationSearchCPP}
                   javaSnippet={interpolationSearchJava}
                   pythonSnippet={interpolationSearchPython}
+                  jsSnippet={interpolationSearchJS}
                 />
               }
             />
@@ -134,6 +147,7 @@ export default function App() {
                   cppSnippet={radixSortCPP}
                   javaSnippet={radixSortJava}
                   pythonSnippet={radixSortPython}
+                  jsSnippet={radixSortJS}
                 />
               }
             />
@@ -145,6 +159,7 @@ export default function App() {
                   cppSnippet={heapSortCPP}
                   javaSnippet={heapSortJava}
                   pythonSnippet={heapSortPython}
+                  jsSnippet={heapSortJS}
                 />
               }
             />
@@ -156,6 +171,7 @@ export default function App() {
                   cppSnippet={insertionSortCPP}
                   javaSnippet={insertionSortJava}
                   pythonSnippet={insertionSortPython}
+                  jsSnippet={insertionSortJS}
                 />
               }
             />

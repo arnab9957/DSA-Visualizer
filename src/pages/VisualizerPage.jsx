@@ -184,6 +184,7 @@ export default function VisualizerPage({
   cppSnippet,
   javaSnippet,
   pythonSnippet,
+  jsSnippet,
 }) {
   const { array, setArray, generateRandomArray } = useVisualizer();
   useDocumentTitle(name);
@@ -211,7 +212,9 @@ export default function VisualizerPage({
       ? cppSnippet
       : selectedLanguage === "Java"
         ? javaSnippet
-        : pythonSnippet;
+        : selectedLanguage === "Python"
+          ? pythonSnippet
+          : jsSnippet;
 
   const themeConfig = colorThemes[colorTheme] ?? colorThemes.ocean;
   const themeColors = themeConfig.colors;
@@ -662,7 +665,7 @@ export default function VisualizerPage({
               {selectedLanguage} Source
             </span>
             <div className="ml-4 flex rounded-lg bg-white/5 p-1 border border-white/10">
-              {["C++", "Java", "Python"].map((lang) => (
+              {["C++", "Java", "Python", "JavaScript"].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => setSelectedLanguage(lang)}
