@@ -1,23 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useVisualizer } from '../hooks/useVisualizer';
 import { motion } from 'framer-motion';
 import { RefreshCw, Play, Pause, RotateCcw, Code2 } from 'lucide-react';
-import { bubbleSort } from '../algorithms/bubbleSort';
 import { selectionSort } from '../algorithms/selectionSort';
 import { mergeSort } from '../algorithms/mergeSort';
-
-import { useEffect, useMemo, useRef, useState } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { motion } from "framer-motion";
 import {
   Activity,
   Binary,
   CheckCheck,
   Clock3,
-  Play,
-  Pause,
-  RotateCcw,
-  Code2,
   Shuffle,
   Eye,
   EyeOff,
@@ -30,7 +21,6 @@ import {
 } from "lucide-react";
 import { useVisualizer } from "../hooks/useVisualizer";
 import { bubbleSort } from "../algorithms/bubbleSort";
-import { selectionSort } from "../algorithms/selectionSort";
 import { quickSort } from "../algorithms/quickSort";
 import { linearSearch } from "../algorithms/linearSearch";
 import { radixSort } from "../algorithms/radixSort";

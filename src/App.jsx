@@ -1,13 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Algorithms from './pages/Algorithms';
-import Contact from './pages/Contact';
-import VisualizerPage from './pages/VisualizerPage';
-import { bubbleSort, bubbleSortCPP } from './algorithms/bubbleSort';
-import { selectionSort , selectionSortCPP} from './algorithms/selectionSort';
-import { mergeSort, mergeSortCPP } from './algorithms/mergeSort';
+
+import { mergeSortCPP } from './algorithms/mergeSort';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
