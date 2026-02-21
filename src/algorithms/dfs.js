@@ -55,7 +55,7 @@ public class Main {
 
         for (int v : adj.get(u)) {
             if(!visited[v]) {
-                dfs(v, adj, visited);
+                dfs(v, adj, visited);   
             }
         }
     }

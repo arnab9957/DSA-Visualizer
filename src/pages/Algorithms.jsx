@@ -203,6 +203,19 @@ const algorithmsCatalog = [
     accent: "text-violet-200",
   },
   {
+  id: 'astar-search',
+  title: 'A* Pathfinding',
+  description: 'An intelligent pathfinding algorithm that uses heuristics to find the shortest path more efficiently than Dijkstra.',
+  path: '/visualizer/astar',
+  category: 'pathfinding', 
+  type: 'Informed Search',
+  complexity: 'O(E log V)',
+  level: 'Intermediate',
+  icon: Zap, // Uses the Zap icon to represent speed/efficiency
+  gradient: 'from-blue-500/25 via-cyan-500/15 to-transparent',
+  accent: 'text-cyan-200',
+},
+  {
     id: "dijkstra",
     title: "Dijkstra's Algorithm",
     description:

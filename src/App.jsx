@@ -13,6 +13,7 @@ import GraphVisualizerPage from "./pages/GraphVisualizerPage";
 import PrimsVisualizerPage from "./pages/PrimsVisualizerPage";
 import DijkstraPage from "./pages/DijkstraPage";
 import KruskalPage from "./pages/KruskalPage";
+import AStarPage from "./pages/AStarPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -109,6 +110,7 @@ export default function App() {
               }
             />
             <Route path="/visualizer/prims" element={<PrimsVisualizerPage />} />
+            <Route path="/visualizer/astar" element={<AStarPage />} />
             <Route
               path="/visualizer/selection-sort"
               element={
