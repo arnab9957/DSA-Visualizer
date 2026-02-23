@@ -236,6 +236,7 @@ export default function App() {
               <Route path="/visualizer/dfs" element={<GraphVisualizerPage />} />
               <Route path="/visualizer/topological-sort" element={<TopologicalSortPage />} />
               <Route path="/visualizer/huffman-coding" element={<HuffmanCodingPage />} />
+              <Route path="/visualizer/floyd-warshall" element={<FloydWarshallPage />} />
             </Routes>
           </main>
 
