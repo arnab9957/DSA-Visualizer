@@ -52,12 +52,13 @@ function generateRandomGraph(nodeCount, width, height) {
     // Initial Tree
     while (uncommitted.size > 0) {
         const u = Array.from(connected)[Math.floor(Math.random() * connected.size)];
-        const v = Array.from(uncommitted)[Math.floor(Math.random() * uncommitted.size)];
+        const v = Array.from(uncommitted)[Math.floor(Math.size > 0 ? uncommitted.size : 1)]; // Safety check
+        const target = Array.from(uncommitted)[Math.floor(Math.random() * uncommitted.size)];
 
-        edges.push({ source: u, target: v, id: `e-${u}-${v}`, status: 'default' });
+        edges.push({ source: u, target: target, id: `e-${u}-${target}`, status: 'default' });
 
-        uncommitted.delete(v);
-        connected.add(v);
+        uncommitted.delete(target);
+        connected.add(target);
     }
 
     // Add extra random edges (density)
@@ -73,7 +74,7 @@ function generateRandomGraph(nodeCount, width, height) {
     return { nodes, edges };
 }
 
-function sleep(ms) {
+function sleep_internal(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -109,7 +110,7 @@ export default function BFSPage() {
     const handleNewGraph = useCallback((count = nodeCount) => {
         if (!containerRef.current) return;
         const { clientWidth, clientHeight } = containerRef.current;
-        const newGraph = generateRandomGraph(count, clientWidth, clientHeight);
+        const newGraph = generateRandomGraph(count, clientWidth || 800, clientHeight || 500);
         setGraph(newGraph);
         setRunStatus('Idle');
         setStatusMessage('New graph generated. Click "Start BFS".');
@@ -154,10 +155,10 @@ export default function BFSPage() {
         for (let i = 0; i < steps; i++) {
             if (stopSignal.current) return false;
             while (pauseSignal.current) {
-                await sleep(50);
+                await sleep_internal(50);
                 if (stopSignal.current) return false;
             }
-            await sleep(stepSize);
+            await sleep_internal(stepSize);
         }
         return true;
     };
@@ -191,7 +192,7 @@ export default function BFSPage() {
             if (stopSignal.current) return;
 
             const curr = queue.shift();
-            
+
             // Mark current node as processing
             updateNode(curr, 'processing');
             setStatusMessage(`Processing Node ${curr}...`);

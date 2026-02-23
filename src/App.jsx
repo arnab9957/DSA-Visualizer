@@ -83,7 +83,8 @@ import {
   binarySearchPython,
   binarySearchJS
 } from "./algorithms/binarySearch";
-import { dfsCPP, dfsJava } from "./algorithms/dfs";
+import { bfsCPP, bfsJava, bfsPython, bfsJS } from "./algorithms/bfs";
+import { dfsCPP, dfsJava, dfsPython, dfsJS } from "./algorithms/dfs";
 
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -231,8 +232,25 @@ export default function App() {
               />
               <Route path="/visualizer/dijkstra" element={<DijkstraPage />} />
               <Route path="/visualizer/kruskal" element={<KruskalPage />} />
-              <Route path="/visualizer/dfs" element={<GraphVisualizerPage />} />
               <Route path="/visualizer/bfs" element={<BFSPage />} />
+              <Route path="/visualizer/bfs-tree" element={
+                <VisualizerPage
+                  name="Breadth First Search"
+                  cppSnippet={bfsCPP}
+                  javaSnippet={bfsJava}
+                  pythonSnippet={bfsPython}
+                  jsSnippet={bfsJS}
+                />
+              } />
+              <Route path="/visualizer/dfs-tree" element={
+                <VisualizerPage
+                  name="Depth First Search"
+                  cppSnippet={dfsCPP}
+                  javaSnippet={dfsJava}
+                  pythonSnippet={dfsPython}
+                  jsSnippet={dfsJS}
+                />
+              } />
               <Route path="/visualizer/topological-sort" element={<TopologicalSortPage />} />
               <Route path="/visualizer/huffman-coding" element={<HuffmanCodingPage />} />
               <Route path="/visualizer/floyd-warshall" element={<FloydWarshallPage />} />

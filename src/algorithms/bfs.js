@@ -1,6 +1,4 @@
-// This file serves as the source for the BFS code snippets.
-// The actual visualization logic for the Graph BFS is embedded in
-// BFSPage.jsx to tightly couple with the graph state.
+import { sleep } from '../utils/helpers';
 
 export const bfsCPP = `#include <iostream>
 #include <vector>
@@ -181,6 +179,50 @@ edges.forEach(([u, v]) => {
 const traversal = bfs(0, adj, V);
 console.log("BFS Traversal:", traversal.join(" "));`;
 
-// The 'bfs' export is kept for compatibility if needed, 
-// but is not used by BFSPage
-export const bfs = async () => { };
+/**
+ * BFS Visualization function for 1D arrays (implicit binary trees)
+ */
+export const bfs = async (array, setArray, speed, stopSignal, pauseSignal) => {
+    let arr = array.map(item => ({ ...item }));
+    let n = arr.length;
+
+    if (n === 0) return;
+
+    let queue = [0];
+    let visited = new Set();
+    visited.add(0);
+
+    while (queue.length > 0) {
+        if (stopSignal.current) return;
+
+        while (pauseSignal.current) {
+            if (stopSignal.current) return;
+            await sleep(100);
+        }
+
+        let currIndex = queue.shift();
+
+        // 1. Mark as comparing/processing
+        arr[currIndex].status = 'comparing';
+        setArray([...arr]);
+        await sleep(speed);
+
+        // 2. Mark as visited
+        arr[currIndex].status = 'sorted';
+        setArray([...arr]);
+        await sleep(speed / 2);
+
+        // Calculate children for implicit binary tree
+        let leftChild = 2 * currIndex + 1;
+        let rightChild = 2 * currIndex + 2;
+
+        if (leftChild < n && !visited.has(leftChild)) {
+            visited.add(leftChild);
+            queue.push(leftChild);
+        }
+        if (rightChild < n && !visited.has(rightChild)) {
+            visited.add(rightChild);
+            queue.push(rightChild);
+        }
+    }
+};

@@ -190,17 +190,59 @@ const algorithmsCatalog = [
   },
   {
     id: "depth-first-search",
-    title: "Depth First Search",
+    title: "DFS (Graph)",
     description:
-      "Traverse a tree or graph by exploring as far as possible along each branch before backtracking.",
+      "Traverse a graph by exploring as far as possible along each branch before backtracking.",
     path: "/visualizer/dfs",
     category: "graph-searching",
     type: "Traversal",
     complexity: "O(V+E)",
     level: "Intermediate",
-    icon: Binary,
+    icon: Network,
     gradient: "from-violet-500/25 via-fuchsia-500/15 to-transparent",
     accent: "text-violet-200",
+  },
+  {
+    id: "breadth-first-search",
+    title: "BFS (Graph)",
+    description:
+      "Explore graphs level by level using a queue, visiting all neighbors before moving to the next level.",
+    path: "/visualizer/bfs",
+    category: "graph-searching",
+    type: "Traversal",
+    complexity: "O(V+E)",
+    level: "Intermediate",
+    icon: Network,
+    gradient: "from-cyan-500/25 via-blue-500/15 to-transparent",
+    accent: "text-cyan-200",
+  },
+  {
+    id: "bfs-tree",
+    title: "BFS (1D Array)",
+    description:
+      "Visualize level-order traversal on a 1D array representing an implicit binary tree.",
+    path: "/visualizer/bfs-tree",
+    category: "searching",
+    type: "Traversal",
+    complexity: "O(V+E)",
+    level: "Beginner",
+    icon: Binary,
+    gradient: "from-cyan-400/25 via-sky-500/15 to-transparent",
+    accent: "text-cyan-100",
+  },
+  {
+    id: "dfs-tree",
+    title: "DFS (1D Array)",
+    description:
+      "Visualize depth-first traversal on a 1D array representing an implicit binary tree.",
+    path: "/visualizer/dfs-tree",
+    category: "searching",
+    type: "Traversal",
+    complexity: "O(V+E)",
+    level: "Beginner",
+    icon: Binary,
+    gradient: "from-violet-400/25 via-fuchsia-500/15 to-transparent",
+    accent: "text-violet-100",
   },
   {
     id: 'astar-search',
@@ -629,8 +671,8 @@ export default function Algorithms() {
               onClick={() => setActiveFilter(tab.id)}
               aria-pressed={activeFilter === tab.id}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${activeFilter === tab.id
-                  ? "border-blue-400/60 bg-blue-500/20 text-blue-100 shadow-lg shadow-blue-900/30"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:border-cyan-400/40 hover:text-white"
+                ? "border-blue-400/60 bg-blue-500/20 text-blue-100 shadow-lg shadow-blue-900/30"
+                : "border-white/10 bg-white/5 text-slate-300 hover:border-cyan-400/40 hover:text-white"
                 }`}
             >
               {tab.label}
@@ -646,8 +688,8 @@ export default function Algorithms() {
               onClick={() => setActiveLevel(level)}
               aria-pressed={activeLevel === level}
               className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all ${activeLevel === level
-                  ? "border-emerald-400/55 bg-emerald-500/15 text-emerald-100"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:border-emerald-400/40 hover:text-white"
+                ? "border-emerald-400/55 bg-emerald-500/15 text-emerald-100"
+                : "border-white/10 bg-white/5 text-slate-300 hover:border-emerald-400/40 hover:text-white"
                 }`}
             >
               {level}

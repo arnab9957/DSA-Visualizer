@@ -143,5 +143,49 @@ const traversal = dfs(0, adj, visited);
 console.log(\"DFS Traversal:\", traversal.join(\" \"));`;
 
 // The 'dfs' export is kept for compatibility if needed, 
-// but is not used by GraphVisualizerPage
-export const dfs = async () => { };
+import { sleep } from '../utils/helpers';
+
+export const dfs = async (array, setArray, speed, stopSignal, pauseSignal) => {
+    let arr = array.map(item => ({ ...item }));
+    let n = arr.length;
+
+    if (n === 0) return;
+
+    let stack = [0];
+    let visited = new Set();
+
+    while (stack.length > 0) {
+        if (stopSignal.current) return;
+
+        while (pauseSignal.current) {
+            if (stopSignal.current) return;
+            await sleep(100);
+        }
+
+        let currIndex = stack.pop();
+
+        if (visited.has(currIndex)) continue;
+        visited.add(currIndex);
+
+        // 1. Mark as comparing/processing
+        arr[currIndex].status = 'comparing';
+        setArray([...arr]);
+        await sleep(speed);
+
+        // 2. Mark as visited
+        arr[currIndex].status = 'sorted';
+        setArray([...arr]);
+        await sleep(speed / 2);
+
+        // Calculate children for implicit binary tree (push right then left for left-to-right DFS)
+        let leftChild = 2 * currIndex + 1;
+        let rightChild = 2 * currIndex + 2;
+
+        if (rightChild < n && !visited.has(rightChild)) {
+            stack.push(rightChild);
+        }
+        if (leftChild < n && !visited.has(leftChild)) {
+            stack.push(leftChild);
+        }
+    }
+};

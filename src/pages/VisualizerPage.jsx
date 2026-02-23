@@ -35,6 +35,7 @@ import { renderHighlightedCode } from "../utils/codeHighlight";
 import { binarysearch } from '../algorithms/binarySearch';
 import { selectionSort } from "../algorithms/selectionSort";
 import { mergeSort } from "../algorithms/mergeSort";
+import { bfs } from "../algorithms/bfs";
 
 const algorithmMap = {
   "Bubble Sort": {
@@ -77,7 +78,7 @@ const algorithmMap = {
     description:
       "Linear Search scans each value from left to right until the target value is discovered.",
   },
-  "Binary Search":{
+  "Binary Search": {
     run: binarysearch,//  function for animation
     category: "Searching",
     best: "O(1)",                // if the target is in the middle
@@ -130,24 +131,34 @@ const algorithmMap = {
   "Depth First Search": {
     run: dfs,
     category: "Searching",
-    best: "O(n)",
-    average: "O(n)",
-    worst: "O(n)",
-    space: "O(h)",
+    best: "O(V+E)",
+    average: "O(V+E)",
+    worst: "O(V+E)",
+    space: "O(V)",
     description:
-      "Depth First Search traversal on an implicit Binary Tree structure.",
+      "Depth First Search traversal on a 1D array representing an implicit Binary Tree.",
+  },
+  "Breadth First Search": {
+    run: bfs,
+    category: "Searching",
+    best: "O(V+E)",
+    average: "O(V+E)",
+    worst: "O(V+E)",
+    space: "O(V)",
+    description:
+      "Breadth First Search (Level-Order) traversal on a 1D array representing an implicit Binary Tree.",
   },
   'Merge Sort': {
-  run: mergeSort,
-  category: "Sorting",
-  best: "O(n log n)",
-  average: "O(n log n)",
-  worst: "O(n log n)",
-  space: "O(n)",
-  description:
-    "Merge Sort is a divide-and-conquer algorithm that splits the array into halves, recursively sorts them, and merges the sorted halves.",
-},
-// Add your algorithm name and function to the run parameter.
+    run: mergeSort,
+    category: "Sorting",
+    best: "O(n log n)",
+    average: "O(n log n)",
+    worst: "O(n log n)",
+    space: "O(n)",
+    description:
+      "Merge Sort is a divide-and-conquer algorithm that splits the array into halves, recursively sorts them, and merges the sorted halves.",
+  },
+  // Add your algorithm name and function to the run parameter.
 };
 
 const statusStyleMap = {
