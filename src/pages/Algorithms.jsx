@@ -203,6 +203,20 @@ const algorithmsCatalog = [
     accent: "text-violet-200",
   },
   {
+    id: "breadth-first-search",
+    title: "Breadth First Search",
+    description:
+      "Explore graphs level by level using a queue, visiting all neighbors before moving to the next level.",
+    path: "/visualizer/bfs",
+    category: "graph-searching",
+    type: "Traversal",
+    complexity: "O(V+E)",
+    level: "Intermediate",
+    icon: Binary,
+    gradient: "from-cyan-500/25 via-blue-500/15 to-transparent",
+    accent: "text-cyan-200",
+  },
+  {
   id: 'astar-search',
   title: 'A* Pathfinding',
   description: 'An intelligent pathfinding algorithm that uses heuristics to find the shortest path more efficiently than Dijkstra.',
