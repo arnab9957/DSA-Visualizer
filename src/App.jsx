@@ -19,6 +19,7 @@ import SignIn from "./pages/SignIn";
 import TopologicalSortPage from "./pages/TopologicalSortPage";
 import SignUp from "./pages/SignUp";
 import HuffmanCodingPage from "./pages/HuffmanCodingPage";
+import FloydWarshallPage from "./pages/FloydWarshallPage";
 
 // UPDATED IMPORTS: Including both CPP and Java versions
 import {
@@ -234,6 +235,7 @@ export default function App() {
               <Route path="/visualizer/bfs" element={<BFSPage />} />
               <Route path="/visualizer/topological-sort" element={<TopologicalSortPage />} />
               <Route path="/visualizer/huffman-coding" element={<HuffmanCodingPage />} />
+              <Route path="/visualizer/floyd-warshall" element={<FloydWarshallPage />} />
             </Routes>
           </main>
 
